@@ -8,7 +8,7 @@ def failing_task():
 with DAG(
     dag_id="example_dag_with_auto_pause",
     start_date=datetime(2023, 1, 1),
-    schedule_interval="@daily",
+    schedule="timedelta(minutes=1)",
     catchup=False,
     max_consecutive_failed_dag_runs=3,  # Set the maximum number of consecutive failed DAG runs
 ) as dag:
