@@ -13,12 +13,9 @@ with DAG(
     catchup=False,
 ) as dag:
 
-    data_sources = ["source_a", "source_b", "source_c"]
-
-    mapped_task = PythonOperator.partial(
-        task_id="process_data",
+    added_values = PythonOperator.partial(
+        task_id="process_data_source",
         python_callable=process_data,
-        map_index_template="{{ task.kwargs['SOURCE'] }}",  # Custom naming template
-    ).expand_kwargs(
-        [{"SOURCE": source} for source in data_sources]  # Data sources
-    )
+        op_kwargs={"y": 10},        
+        map_index_template="Processing source={{ task.op_args[0] }}",
+    ).expand(op_args=[["source_a"], ["source_b"], ["source_c"]])
