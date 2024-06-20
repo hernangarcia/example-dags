@@ -19,6 +19,6 @@ with DAG(
         task_id="process_data",
         python_callable=process_data,
         map_index_template="{{ task.env['SOURCE'] }}",  # Custom naming template
-    ).expand(
-        env=[{"SOURCE": source} for source in data_sources]  # Data sources
+    ).expand_kwargs(
+        [{"SOURCE": source} for source in data_sources]  # Data sources
     )
