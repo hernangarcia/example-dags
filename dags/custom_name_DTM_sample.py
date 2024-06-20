@@ -18,7 +18,7 @@ with DAG(
     mapped_task = PythonOperator.partial(
         task_id="process_data",
         python_callable=process_data,
-        map_index_template="{{ task.parameters['SOURCE'] }}",  # Custom naming template
-    ).expand(
-        parameters=[{"SOURCE": source} for source in data_sources]  # Data sources
+        map_index_template="{{ task.kwargs['SOURCE'] }}",  # Custom naming template
+    ).expand_kwargs(
+        [{"SOURCE": source} for source in data_sources]  # Data sources
     )
