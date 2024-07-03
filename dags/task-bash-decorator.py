@@ -1,7 +1,5 @@
-from airflow import DAG
-from airflow.decorators import task
-from airflow.utils.dates import days_ago
-from datetime import timedelta
+from airflow.decorators import dag, task
+from datetime import datetime, timedelta
 
 default_args = {
     'owner': 'airflow',
@@ -29,14 +27,14 @@ order_id,customer_id,product,quantity,price
 105,5,Product B,1,29.99
 """
 
-with DAG(
-    dag_id='customer_order_analysis',
+@dag(
+    dag_id='task-bash-customer_order_analysis',
     default_args=default_args,
-    start_date=days_ago(1),
+    start_date=datetime(2023, 1, 1),
     schedule_interval=timedelta(days=1),
     catchup=False,
-) as dag:
-
+)
+def customer_order_analysis_dag():
     @task.bash
     def clean_data():
         # Clean customer data
@@ -94,3 +92,5 @@ with DAG(
     cleaned_data = clean_data()
     transformed_data = transform_data(cleaned_data, cleaned_data)
     analysis_results = analyze_data(transformed_data, transformed_data)
+
+customer_order_analysis_dag()
